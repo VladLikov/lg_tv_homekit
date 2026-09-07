@@ -27,7 +27,10 @@ PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 PYTHONPATH=. python -m pytest -p pytest_asyncio
 Не проверены: реальный HA Container Linux amd64, полный bootstrap с пользовательским YAML,
 mDNS, pairing iPhone, фактические команды LG, отображение Apple Home и сохранение pairing
 после обновления на NAS. Проверка временного IID Store не заменяет эти проверки.
-HACS/hassfest workflows подготовлены, но удалённо не запускались: репозитории ещё не опубликованы.
+GitHub Actions: HACS и hassfest прошли после добавления локальной иконки;
+матрица поведения также прошла для исходного кода релиза.
+Запуски: https://github.com/VladLikov/lg_tv_homekit/actions
+Это проверки Linux CI, а не пользовательского NAS или iPhone.
 
 Добавление новой версии в compatibility.py требует полного прогона этой матрицы
 и просмотра изменений используемых HomeKit-классов. Проверка сигнатур дополняет тесты,
