@@ -1,0 +1,16 @@
+{
+  "domain": "lg_tv_homekit",
+  "name": "LG TV HomeKit Backlight",
+  "codeowners": [
+    "@VladLikov"
+  ],
+  "dependencies": [
+    "homekit"
+  ],
+  "documentation": "https://github.com/VladLikov/lg_tv_homekit",
+  "integration_type": "helper",
+  "iot_class": "local_push",
+  "issue_tracker": "https://github.com/VladLikov/lg_tv_homekit/issues",
+  "requirements": [],
+  "version": "0.2.0"
+}

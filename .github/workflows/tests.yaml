@@ -1,0 +1,17 @@
+name: HomeKit behavior matrix
+on: [push, pull_request, workflow_dispatch]
+permissions:
+  contents: read
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        ha: ["2026.8.3", "2026.9.1"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+      - run: pip install "homeassistant==${{ matrix.ha }}" -r requirements-test.txt
+      - run: PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 PYTHONPATH=. python -m pytest -p pytest_asyncio.plugin tests -q

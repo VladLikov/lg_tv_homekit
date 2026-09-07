@@ -1,0 +1,22 @@
+name: Build release archive
+on:
+  workflow_dispatch:
+  push:
+    tags: ["v*"]
+permissions:
+  contents: read
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+      - run: python scripts/package.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: release-archive
+          path: dist/*
+# Publication is deliberately manual: download the artifact and attach its ZIP
+# and checksum to a GitHub Release only after approval and successful tests.

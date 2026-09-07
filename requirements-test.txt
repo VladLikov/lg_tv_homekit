@@ -1,0 +1,11 @@
+# Select Home Assistant separately for each matrix job.
+HAP-python==5.0.0
+fnv-hash-fast==2.0.3
+homekit-audio-proxy==1.2.1
+PyQRCode==1.2.1
+base36==0.1.1
+ha-ffmpeg==3.2.2
+av==18.1.0
+PyTurboJPEG==2.5.0
+pytest==9.0.3
+pytest-asyncio==1.4.0

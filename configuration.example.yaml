@@ -1,0 +1,7 @@
+# Use your existing entity IDs. Preserve your current HomeKit exporter and Inputs settings.
+lg_tv_homekit:
+  tv_entity_id: media_player.tv
+  backlight_entity_id: number.tv_backlight
+# Optional, only if intentionally changing the displayed Inputs:
+#  show_inputs: false
+#  include_sources: [Apple, PS5]

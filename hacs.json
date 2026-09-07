@@ -1,0 +1,6 @@
+{
+  "name": "LG TV HomeKit Backlight",
+  "homeassistant": "2026.8.3",
+  "zip_release": true,
+  "filename": "lg_tv_homekit.zip"
+}
