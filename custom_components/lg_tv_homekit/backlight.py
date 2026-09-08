@@ -71,7 +71,10 @@ class Backlight:
     def snapshot(self):
         if not self.powered():
             return False, 0
-        return True, self.level() or 0
+        level = self.level()
+        # Apple Home must not receive an enabled light with zero brightness.
+        # Backlight power is independent of the Television power characteristic.
+        return level is not None and level > 0, level or 0
 
     @callback
     def sync(self):
@@ -80,7 +83,7 @@ class Backlight:
         on, brightness = self.snapshot()
         self.on.set_value(on)
         self.brightness.set_value(brightness)
-        self.fault.set_value(int(on and self.level() is None))
+        self.fault.set_value(int(self.powered() and self.level() is None))
 
     @callback
     def _changed(self, event):

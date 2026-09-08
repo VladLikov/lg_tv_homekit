@@ -120,7 +120,7 @@ async def test_brightness_off_on_and_tv_power(env):
     b.on.client_update_value(False)
     await drain(hass)
     assert calls[-1][2]["value"] == 0
-    assert b.on.value is True and b.brightness.value == 0
+    assert b.on.value is False and b.brightness.value == 0
     before = len(calls)
     b.on.client_update_value(True)
     await drain(hass)
@@ -322,3 +322,44 @@ async def test_iids_survive_real_local_storage_reload(env):
     )
     assert second.to_HAP() == first_hap
     await reloaded.async_save()
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize(
+    "level,expected", [("0", 0), ("0.0", 0), ("1", 1), ("100", 100)]
+)
+async def test_backlight_hap_zero_is_off_without_turning_tv_off(env, level, expected):
+    hass, acc, calls, _ = env
+    b = acc._lg_backlight
+    hass.states.async_set("number.tv_backlight", level, {"min": 0, "max": 100})
+    await drain(hass)
+    assert b.snapshot() == (expected > 0, expected)
+    assert b.on.get_value() is (expected > 0)
+    assert b.brightness.get_value() == expected
+    light = next(
+        service for service in acc.to_HAP()["services"] if service["type"] == "43"
+    )
+    values = {char["type"]: char.get("value") for char in light["characteristics"]}
+    assert values["25"] is (expected > 0)
+    assert values["8"] == expected
+    assert b.fault.value == 0
+    assert hass.states.get("media_player.tv").state == "on"
+    assert not calls
+
+
+@pytest.mark.asyncio
+async def test_backlight_zero_on_noop_and_slider_recovery(env):
+    hass, acc, calls, _ = env
+    b = acc._lg_backlight
+    b.brightness.client_update_value(0)
+    await drain(hass)
+    assert b.snapshot() == (False, 0)
+    before = len(calls)
+    b.on.client_update_value(True)
+    await drain(hass)
+    assert len(calls) == before
+    assert b.on.get_value() is False
+    b.brightness.client_update_value(25)
+    await drain(hass)
+    assert b.snapshot() == (True, 25)
+    assert all(call[:2] == ("number", "set_value") for call in calls)

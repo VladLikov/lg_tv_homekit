@@ -1,4 +1,4 @@
-# LG TV HomeKit Backlight — 0.2.0
+# LG TV HomeKit Backlight — 0.2.1
 
 Один штатный Home Assistant HomeKit Television accessory с linked Lightbulb `Backlight`.
 Компонент расширяет в памяти `TelevisionMediaPlayer` только для выбранной TV entity.
@@ -39,7 +39,8 @@ lg_tv_homekit:
 - Питание TV управляется штатным media_player.
 - Backlight 0–100 записывает `number.set_value`, только когда TV включён и number корректен.
 - Backlight Off устанавливает 0, не выключая телевизор; On без яркости ничего не делает.
-- On/Off Backlight следует питанию TV даже при яркости 0.
+- При яркости 0 Backlight передаётся как Off/0; при положительной яркости — On с фактическим значением. Питание Television независимо.
+- On без яркости остаётся no-op: чтобы поднять подсветку с нуля, переместите ползунок.
 - При выключенном TV отображается Off/0; команды яркости не будят TV и не откладываются.
 - HA остаётся источником состояния; недоступная number блокирует запись и выставляет StatusFault.
 
@@ -72,3 +73,10 @@ python scripts/package.py
 HACS, hassfest и тестовая матрица выполняются в GitHub Actions; результаты — во вкладке Actions.
 Упаковка создаёт `dist/lg_tv_homekit.zip` и SHA-256. Workflow только собирает артефакт;
 создание GitHub Release остаётся ручным шагом.
+
+## 0.2.1: нулевая яркость
+
+Пользователь подтвердил расхождение: HA показывал 0.0, Apple Home — 100%.
+Компонент больше не передаёт сочетание On=true / Brightness=0.
+Пакет теперь содержит Off/0, без изменения питания TV, service IDs или pairing.
+Результат отображения на реальном iPhone после обновления ещё требуется подтвердить.
